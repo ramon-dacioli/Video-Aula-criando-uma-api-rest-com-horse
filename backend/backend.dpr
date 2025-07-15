@@ -4,13 +4,45 @@ program backend;
 
 {$R *.res}
 
-uses Horse;
+uses  Horse,
+      Horse.Jhonson, // It's necessary to use the unit
+      System.JSON,
+      Horse.Commons,
+      System.SysUtils;
+
+var
+  Users: TJSONArray;
 
 begin
-  THorse.Get('/ping',
+
+  THorse.Use(Jhonson());
+
+  Users := TJSONArray.Create;
+
+  THorse.Get('/users',
     procedure(Req: THorseRequest; Res: THorseResponse)
     begin
-      Res.Send('pong');
+      Res.Send<TJSONAncestor>(Users.Clone);
+    end);
+
+  THorse.Post('/users',
+    procedure(Req: THorseRequest; Res: THorseResponse)
+    var
+      User: TJSONObject;
+    begin
+      User := Req.Body<TJSONObject>.Clone as TJSONObject;
+      Users.AddElement(User);
+      Res.Send<TJSONAncestor>(User.Clone).Status(THTTPStatus.Created);
+    end);
+
+  THorse.Delete('/users/:id',
+    procedure(Req: THorseRequest; Res: THorseResponse)
+    var
+      id: Integer;
+    begin
+      Id := Req.Params.Items['id'].ToInteger;
+      Users.Remove(Pred(Id)).Free;
+      Res.Send<TJSONAncestor>(Users.Clone).Status(THTTPStatus.NoContent);
     end);
 
   THorse.Listen(9000);
