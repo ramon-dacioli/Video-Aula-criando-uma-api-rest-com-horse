@@ -5,6 +5,7 @@ program backend;
 {$R *.res}
 
 uses  Horse,
+      Horse.Compression,
       Horse.Jhonson, // It's necessary to use the unit
       Horse.BasicAuthentication,
       System.JSON,
@@ -16,7 +17,9 @@ var
 
 begin
 
-  THorse.Use(Jhonson());
+  THorse
+    .Use(Compression()) // Must come before Jhonson middleware
+    .Use(Jhonson);
 
   THorse.Use(HorseBasicAuthentication(
     function(const AUsername, APassword: string): Boolean
@@ -26,6 +29,18 @@ begin
     end));
 
   Users := TJSONArray.Create;
+
+  THorse.Get('/ping',
+    procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc)
+    var
+      I: Integer;
+      LPong: TJSONArray;
+    begin
+      LPong := TJSONArray.Create;
+      for I := 0 to 1000 do
+        LPong.Add(TJSONObject.Create(TJSONPair.Create('ping', 'pong')));
+      Res.Send(LPong);
+    end);
 
   THorse.Get('/users',
     procedure(Req: THorseRequest; Res: THorseResponse)
