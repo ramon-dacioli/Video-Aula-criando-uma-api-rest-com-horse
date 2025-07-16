@@ -7,6 +7,7 @@ program backend;
 uses  Horse,
       Horse.Compression,
       Horse.Jhonson, // It's necessary to use the unit
+      Horse.HandleException,
       Horse.BasicAuthentication,
       System.JSON,
       Horse.Commons,
@@ -19,7 +20,8 @@ begin
 
   THorse
     .Use(Compression()) // Must come before Jhonson middleware
-    .Use(Jhonson);
+    .Use(Jhonson)
+    .Use(HandleException);
 
   THorse.Use(HorseBasicAuthentication(
     function(const AUsername, APassword: string): Boolean
@@ -29,6 +31,17 @@ begin
     end));
 
   Users := TJSONArray.Create;
+
+  THorse.Get('/exception',
+    procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc)
+    var
+      LConteudo: TJSONObject;
+    begin
+      raise Exception.Create('Error Message teste2');
+      LConteudo := TJSONObject.Create;
+      LConteudo.AddPair('nome', 'ramon');
+      Res.Send(LConteudo);
+    end);
 
   THorse.Get('/ping',
     procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc)
