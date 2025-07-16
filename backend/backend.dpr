@@ -6,6 +6,7 @@ program backend;
 
 uses  Horse,
       Horse.Jhonson, // It's necessary to use the unit
+      Horse.BasicAuthentication,
       System.JSON,
       Horse.Commons,
       System.SysUtils;
@@ -16,6 +17,13 @@ var
 begin
 
   THorse.Use(Jhonson());
+
+  THorse.Use(HorseBasicAuthentication(
+    function(const AUsername, APassword: string): Boolean
+    begin
+      // Here inside you can access your database and validate if username and password are valid
+      Result := AUsername.Equals('user') and APassword.Equals('password');
+    end));
 
   Users := TJSONArray.Create;
 
