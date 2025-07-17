@@ -1,0 +1,50 @@
+program arquivos;
+
+{$APPTYPE CONSOLE}
+
+{$R *.res}
+
+uses
+  Horse,
+  Horse.OctetStream, // It's necessary to use the unit
+  Horse.Logger, // It's necessary to use the unit
+  Horse.Logger.Provider.Console,
+  System.Classes,
+  System.SysUtils;
+
+var
+  LLogFileConfig: THorseLoggerConsoleConfig;
+
+begin
+  // It's necessary to add the middleware in the Horse:
+  THorse.Use(OctetStream);
+
+  // Here you will define the provider that will be used.
+  THorseLoggerManager.RegisterProvider(THorseLoggerProviderConsole.New());
+
+  // It's necessary to add the middleware in the Horse:
+  THorse.Use(THorseLoggerManager.HorseCallback);
+
+  THorse.Get('/arquivos',
+    procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc)
+    var
+      LStream: TFileStream;
+    begin
+      // Now you can send your stream:
+      LStream := TFileStream.Create(ExtractFilePath(ParamStr(0)) + 'imagem.jpg', fmOpenRead);
+      Res.Send<TStream>(LStream);
+    end);
+
+  THorse.Post('/arquivos',
+    procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc)
+    var
+      LStream: TMemoryStream;
+    begin
+      // Now you can send your stream:
+      LStream := Req.Body<TMemoryStream>;
+      LStream.SaveToFile(ExtractFilePath(ParamStr(0)) + 'imagem_copia.jpg');
+      Res.Send('Imagem cadastrada com sucesso').Status(201);
+    end);
+
+  THorse.Listen(9000);
+end.

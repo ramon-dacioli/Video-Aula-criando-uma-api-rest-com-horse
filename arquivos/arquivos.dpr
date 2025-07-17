@@ -7,12 +7,29 @@ program arquivos;
 uses
   Horse,
   Horse.OctetStream, // It's necessary to use the unit
+  Horse.Logger, // It's necessary to use the unit
+  Horse.Logger.Provider.Console,
   System.Classes,
   System.SysUtils;
+
+var
+  LLogFileConfig: THorseLoggerConsoleConfig;
 
 begin
   // It's necessary to add the middleware in the Horse:
   THorse.Use(OctetStream);
+
+  LLogFileConfig := THorseLoggerConsoleConfig.New
+    .SetLogFormat('${request_clientip} [${time}] ${response_status} ${request_path_info}');
+
+  // You can also specify the log format:
+  THorseLoggerManager.RegisterProvider(THorseLoggerProviderConsole.New(LLogFileConfig));
+
+  // Here you will define the provider that will be used.
+  //THorseLoggerManager.RegisterProvider(THorseLoggerProviderConsole.New());
+
+  // It's necessary to add the middleware in the Horse:
+  THorse.Use(THorseLoggerManager.HorseCallback);
 
   THorse.Get('/arquivos',
     procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc)
