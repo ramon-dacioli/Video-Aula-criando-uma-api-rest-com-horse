@@ -1,0 +1,27 @@
+program samples;
+
+{$APPTYPE CONSOLE}
+
+{$R *.res}
+
+uses
+  System.SysUtils,
+  Horse,
+  Horse.Paginate,
+  Horse.Jhonson,
+  System.JSON,
+  Services.bairro in 'src\services\Services.bairro.pas' {DataModule1: TDataModule};
+
+begin
+  THorse
+    .Use(Paginate)
+    .Use(Jhonson);
+
+  THorse.Get('/paginate',
+    procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc)
+    begin
+
+    end);
+
+  THorse.Listen(9000);
+end.

@@ -1,0 +1,22 @@
+unit Services.bairro;
+
+interface
+
+uses
+  System.SysUtils, System.Classes;
+
+type
+  TServiceBairro = class(TDataModule)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+implementation
+
+{%CLASSGROUP 'System.Classes.TPersistent'}
+
+{$R *.dfm}
+
+end.
