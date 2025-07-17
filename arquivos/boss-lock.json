@@ -29,7 +29,15 @@
 		"github.com/hashload/horse-logger-provider-console": {
 			"name": "horse-logger-provider-console",
 			"version": "1.0.9",
-			"hash": "d8a9d0ed0d0cd97ea0b6f3bd65f62bc6",
+			"hash": "c77abdd5b85ff7703562fdd1bc7c895a",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
+		"github.com/hashload/horse-logger-provider-logfile": {
+			"name": "horse-logger-provider-logfile",
+			"version": "1.0.12",
+			"hash": "33c5f7a7152dd5516e2d220427f83ba9",
 			"artifacts": {},
 			"failed": false,
 			"changed": false

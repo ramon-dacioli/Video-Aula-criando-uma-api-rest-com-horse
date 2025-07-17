@@ -8,25 +8,26 @@ uses
   Horse,
   Horse.OctetStream, // It's necessary to use the unit
   Horse.Logger, // It's necessary to use the unit
-  Horse.Logger.Provider.Console,
+  Horse.Logger.Provider.LogFile, // It's necessary to use the unit
   System.Classes,
   System.SysUtils;
 
 var
-  LLogFileConfig: THorseLoggerConsoleConfig;
+  LLogFileConfig: THorseLoggerLogFileConfig;
 
 begin
   // It's necessary to add the middleware in the Horse:
   THorse.Use(OctetStream);
 
-  LLogFileConfig := THorseLoggerConsoleConfig.New
-    .SetLogFormat('${request_clientip} [${time}] ${response_status} ${request_path_info}');
+  LLogFileConfig := THorseLoggerLogFileConfig.New
+    .SetLogFormat('${request_clientip} [${time}] ${response_status}')
+    .SetDir(ExtractFilePath(ParamStr(0)));
 
-  // You can also specify the log format:
-  THorseLoggerManager.RegisterProvider(THorseLoggerProviderConsole.New(LLogFileConfig));
+  // You can also specify the log format and the path where it will be saved:
+  THorseLoggerManager.RegisterProvider(THorseLoggerProviderLogFile.New(LLogFileConfig));
 
   // Here you will define the provider that will be used.
-  //THorseLoggerManager.RegisterProvider(THorseLoggerProviderConsole.New());
+  THorseLoggerManager.RegisterProvider(THorseLoggerProviderLogFile.New());
 
   // It's necessary to add the middleware in the Horse:
   THorse.Use(THorseLoggerManager.HorseCallback);
