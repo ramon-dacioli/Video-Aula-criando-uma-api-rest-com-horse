@@ -1,0 +1,39 @@
+program jwtGerar;
+
+{$APPTYPE CONSOLE}
+
+{$R *.res}
+
+uses  Horse,
+      JOSE.Core.JWT,
+      JOSE.Core.Builder,
+      SysUtils;
+
+begin
+  THorse.Get('/login',
+    procedure(Req: THorseRequest; Res: THorseResponse)
+    var
+      LToken: TJWT;
+      LCompactToken: string;
+    begin
+      LToken := TJWT.Create;
+      try
+        // Token claims
+        LToken.Claims.Issuer := 'Fiorilli S/C Software';
+        LToken.Claims.Subject := '762742';
+        LToken.Claims.Expiration := Now + 1;
+
+        // Outros claims
+        LToken.Claims.SetClaimOfType<string>('nome', 'ramon');
+        LToken.Claims.SetClaimOfType<Boolean>('mvp', False);
+
+        // Signing and Compact format creation
+        LCompactToken := TJOSE.SHA256CompactToken('key', LToken);
+        Res.Send(LCompactToken);
+      finally
+        LToken.Free;
+      end;
+    end);
+
+  THorse.Listen(9000);
+end.

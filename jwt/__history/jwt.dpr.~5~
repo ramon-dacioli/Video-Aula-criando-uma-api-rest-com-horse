@@ -1,0 +1,31 @@
+program jwt;
+
+{$APPTYPE CONSOLE}
+
+{$R *.res}
+
+uses Horse,
+      JOSE.Core.JWT,
+      JOSE.Core.Builder;
+
+begin
+  THorse.Get('/login',
+    procedure(Req: THorseRequest; Res: THorseResponse)
+    var
+      LResult: string;
+    begin
+      LResult := TJOSEProcess.New
+        .SetIssuer('Delphi JOSE Library')
+        .SetIssuedAt(Now)
+        .SetExpiration(Now + 1)
+        .SetAlgorithm(LAlg)
+        .SetKey(TJOSEAlgorithmId.HS256)
+        .Build
+        .GetCompactToken
+      ;
+
+      memoCompact.Lines.Add(LResult);
+    end);
+
+  THorse.Listen(9000);
+end.
