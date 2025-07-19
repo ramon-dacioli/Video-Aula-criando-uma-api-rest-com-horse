@@ -1,0 +1,46 @@
+unit Controller.User;
+
+interface
+
+procedure Registry;
+
+implementation
+
+uses Horse;
+
+procedure ListarUsuarios(Req: THorseRequest; Res: ThorseResponse; Next: TProc);
+begin
+  Res.Send('[{"id": 1, "name": "ramon", "lastName": "luiz", "lastUpdate": "2025-07-18"}]');
+end;
+
+procedure ObterUsuario(Req: THorseRequest; Res: ThorseResponse; Next: TProc);
+begin
+  Res.Send('[{"id": 2, "name": "ramon", "lastName": "luiz", "lastUpdate": "2025-07-18"}]');
+end;
+
+procedure CadastrarUsuario(Req: THorseRequest; Res: ThorseResponse; Next: TProc);
+begin
+  Res.Send(Req.Body).Status(THTTPStatus.Created);
+end;
+
+procedure AlterarUsuario(Req: THorseRequest; Res: ThorseResponse; Next: TProc);
+begin
+  Res.Status(THTTPStatus.NoContent);
+end;
+
+procedure ExcluirUsuario(Req: THorseRequest; Res: ThorseResponse; Next: TProc);
+begin
+  Res.Status(THTTPStatus.NoContent);
+end;
+
+procedure Registry;
+begin
+  THorse.Group.Prefix('v1')
+    .Get('/users', ListarUsuarios)
+    .Get('/users/:id', ObterUsuario)
+    .Get('/users', CadastrarUsuario)
+    .Get('/users/:id', AlterarUsuario)
+    .Get('/users/:id', ExcluirUsuario)
+end;
+
+end.

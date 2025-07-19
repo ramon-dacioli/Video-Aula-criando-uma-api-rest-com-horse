@@ -1,0 +1,31 @@
+unit Controller.User;
+
+interface
+
+procedure Registry;
+
+implementation
+
+uses Horse;
+
+procedure ListarUsuarios(Req: THorseRequest; Res: ThorseResponse; Next: TProc);
+begin
+  Res.Send('[{"id": 1, "name": "ramon", "lastName": "luiz", "lastUpdate": "2025-07-18"}]');
+end;
+
+procedure ListarUsuarios(Req: THorseRequest; Res: ThorseResponse; Next: TProc);
+begin
+  Res.Send('[{"id": 2, "name": "ramon", "lastName": "luiz", "lastUpdate": "2025-07-18"}]');
+end;
+
+procedure ListarUsuarios(Req: THorseRequest; Res: ThorseResponse; Next: TProc);
+begin
+
+end;
+
+procedure ListarUsuarios(Req: THorseRequest; Res: ThorseResponse; Next: TProc);
+begin
+
+end;
+
+end.

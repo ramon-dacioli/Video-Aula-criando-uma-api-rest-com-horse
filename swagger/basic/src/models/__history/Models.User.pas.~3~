@@ -1,0 +1,21 @@
+unit Models.User;
+
+interface
+
+type
+  TUser = class
+  private
+    Fid: Double;
+    Fname: String;
+    FlastName: String;
+    FlastUpdate: TDataTime;
+  published
+    property id: Double read Fid write Fid;
+    property name: String read Fname write Fname;
+    property lastName: String read FlastName write FlastName;
+    property lastUpdate: TDataTime read FlastUpdate write FlastUpdate;
+  end;
+
+implementation
+
+end.

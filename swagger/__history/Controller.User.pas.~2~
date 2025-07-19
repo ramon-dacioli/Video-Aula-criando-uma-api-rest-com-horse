@@ -1,0 +1,16 @@
+unit Controller.User;
+
+interface
+
+procedure Registry;
+
+implementation
+
+uses Horse;
+
+procedure ListarUsuarios(Req: THorseRequest; Res: ThorseResponse; Next: TProc);
+begin
+
+end;
+
+end.

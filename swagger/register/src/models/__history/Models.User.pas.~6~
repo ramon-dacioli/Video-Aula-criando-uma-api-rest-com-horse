@@ -1,0 +1,24 @@
+unit Models.User;
+
+interface
+
+uses GBSwagger.Model.Attributes;
+
+type
+  TUser = class
+  private
+    Fname: String;
+    FlastName: String;
+    Fid: Int64;
+    FlastUpdate: TDateTime;
+    procedure SetlastUpdate(const Value: TDateTime);
+  published
+    property id: Int64 read Fid write Fid;
+    property name: String read Fname write Fname;
+    property lastName: String read FlastName write FlastName;
+    property lastUpdate: TDateTime read FlastUpdate write SetlastUpdate;
+  end;
+
+implementation
+
+end.

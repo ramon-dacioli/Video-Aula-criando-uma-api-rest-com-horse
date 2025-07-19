@@ -1,0 +1,21 @@
+unit Models.User;
+
+interface
+
+uses GBSwagger.Model.Attributes;
+
+type
+  TUser = class
+  private
+    Fname: String;
+    FlastName: String;
+    Fid: Int64;
+    FlastUpdate: TDateTime;
+  public
+    [SwagProp('Código', True)]
+    property id: Int64 read Fid write Fid;
+  end;
+
+implementation
+
+end.
